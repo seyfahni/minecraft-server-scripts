@@ -5,10 +5,6 @@ StopWhenUnneeded=yes
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-User=minecraft
-Group=minecraft
 
-ExecStart=rsync -r -t -v /opt/minecraft/worlds/ /dev/shm/minecraft/
-ExecStop=rsync -r -t -v /dev/shm/minecraft/ /opt/minecraft/worlds/
-ExecStopPost=rm -r /dev/shm/minecraft/
-
+ExecStart=rsync -auv /opt/minecraft/Minecraft/worlds/ /dev/shm/minecraft/
+ExecStop=rsync -auv /dev/shm/minecraft/ /opt/minecraft/Minecraft/worlds/

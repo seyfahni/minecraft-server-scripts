@@ -4,7 +4,5 @@ Requisite=minecraft-ramdisk-prepare.service
 
 [Service]
 Type=oneshot
-User=minecraft
-Group=minecraft
 
-ExecStart=rsync -r -t -v /dev/shm/minecraft/ /opt/minecraft/worlds/
+ExecStart=rsync -auv /dev/shm/minecraft/ /opt/minecraft/Minecraft/worlds/
