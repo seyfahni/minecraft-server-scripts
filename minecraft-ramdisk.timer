@@ -1,0 +1,12 @@
+[Unit]
+
+After=minecraft-ramdisk-prepare.service
+BindsTo=minecraft-ramdisk-prepare.service
+
+[Timer]
+OnActiveSec=30
+OnUnitInactiveSec=30
+
+[Install]
+WantedBy=multi-user.target
+

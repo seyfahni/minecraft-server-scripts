@@ -1,0 +1,14 @@
+[Unit]
+Description=Prepate ramdisc worlds folder and copy worlds into it
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=minecraft
+Group=minecraft
+
+ExecStart=rsync -r -t -v /opt/minecraft/worlds/ /dev/shm/minecraft/
+ExecStop=rsync -r -t -v /dev/shm/minecraft/ /opt/minecraft/worlds/
+ExecStopPost=rm -r /dev/shm/minecraft/
+
