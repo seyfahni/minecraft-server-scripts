@@ -1,8 +1,8 @@
 #!/bin/bash
-# sudo-less wrapper
-
 set -euo pipefail
 IFS=$'\n\t'
+
+# sudo-less wrapper
 
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 SAFE_SELF="/usr/local/bin/minecraftctl"
@@ -22,46 +22,46 @@ then
 fi
 
 
-if [[ $# -eq 2 && $2 =~ ^[[:alnum:]_-]+$ && -d /opt/$SYSTEMD_UNIT_NAME/$2 ]]
+if [[ $# -eq 2 && "$2" =~ ^[[:alnum:]_-]+$ && -d "/opt/$SYSTEMD_UNIT_NAME/$2" ]]
 then
-	if [[ $1 = console ]]
+	if [[ "$1" = console ]]
 	then
-		if [[ $(id -un) = $SCREEN_OWNER ]]
+		if [[ "$(id -un)" = "$SCREEN_OWNER" ]]
 		then
 			script -c "screen -x $2" /dev/null
 		else
-			sudo -n -u $SCREEN_OWNER $SAFE_SELF console "$2"
+			sudo -n -u "$SCREEN_OWNER" "$SAFE_SELF" console "$2"
 		fi
 	elif [[ $1 =~ ^(start|stop|restart|status|enable|disable)$ ]]
 	then
-		if [[ $(id -u) -eq 0 ]]
+		if [[ "$(id -u)" -eq 0 ]]
 		then
-			systemctl "$1" $SYSTEMD_UNIT_NAME@"$2".service
+			systemctl "$1" "$SYSTEMD_UNIT_NAME@$2.service"
 			code=$?
-			if [[ $1 != status ]]
+			if [[ "$1" != status ]]
 			then
-				[[ $code -eq 0 ]] && echo "OK" || echo "ERROR"
+				[[ "$code" -eq 0 ]] && echo "OK" || echo "ERROR"
 			fi
 		else
-			sudo -n $SAFE_SELF "$1" "$2"
+			sudo -n "$SAFE_SELF" "$1" "$2"
 		fi
 	else
 		print_help
 		exit 1
 	fi
-elif [[ $# -eq 3 && $1 = create && $2 =~ ^[[:alnum:]_-]+$ && ! -d /opt/$SYSTEMD_UNIT_NAME/$2 && -f $3 && -r $3 ]]
+elif [[ $# -eq 3 && "$1" = create && "$2" =~ ^[[:alnum:]_-]+$ && ! -d "/opt/$SYSTEMD_UNIT_NAME/$2" && -f "$3" && -r "$3" ]]
 then
-	if [[ $(id -un) = $SCREEN_OWNER ]]
+	if [[ $(id -un) = "$SCREEN_OWNER" ]]
 	then
-		mkdir /opt/$SYSTEMD_UNIT_NAME/$2
-		cp $3 /opt/$SYSTEMD_UNIT_NAME/$2/$3
-		if [[ $3 != minecraft_server.jar ]]
+		mkdir "/opt/$SYSTEMD_UNIT_NAME/$2"
+		cp "$3" "/opt/$SYSTEMD_UNIT_NAME/$2/$3"
+		if [[ "$3" != minecraft_server.jar ]]
 		then
-			ln -s $3 /opt/$SYSTEMD_UNIT_NAME/$2/minecraft_server.jar
+			ln -s "$3" "/opt/$SYSTEMD_UNIT_NAME/$2/minecraft_server.jar"
 		fi
-		echo "eula=true" > /opt/$SYSTEMD_UNIT_NAME/$2/eula.txt
+		echo "eula=true" > "/opt/$SYSTEMD_UNIT_NAME/$2/eula.txt"
 	else
-		sudo -n -u $SCREEN_OWNER $SAFE_SELF create "$2" "$3"
+		sudo -n -u "$SCREEN_OWNER" "$SAFE_SELF" create "$2" "$3"
 	fi
 else
 	print_help
