@@ -48,6 +48,7 @@ Inside folder `downloader`:
 
 - Put `paper-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Put `tuinity-download` into `/usr/local/bin/` and ensure it is executable by everyone
+- Install `jq` on your system
 
 ### Usage
 
@@ -75,3 +76,51 @@ Inside folder `world-ramdisk`:
 - Tell your server to use the worlds inside your ramdisk
   - Either use `--world-dir /dev/shm/minecraft/` if your server supports it
   - Or create symlinks to your worlds from the server directory to the shared memory worlds
+
+## Logfile analysis tools
+
+Analyse minecraft server logs to extract some information.
+
+### Files
+
+Inside folder `logfile-analysis`:
+- `userjoins.sh`
+- `process-userjoins.r`
+
+### Installation
+
+- Ensure you have `bash` installed
+- Put `userjoins.sh` and `process-userjoins.r` somewhere you have easy access (e.g. `~/.bin/` or `/usr/local/bin/`) and ensure it is executable
+  - I don't recommend installing it globally, but it is possible and won't break anything
+- Install [R](https://www.r-project.org/) on your system
+  - If you analyze files on a remote server you might want to install R locally instead
+  - Required R libraries:
+    - Either `readr` and `tibble`
+    - Or [the complete `tidyverse` library](https://www.tidyverse.org/)
+
+### Usage
+
+1. Create a directory for analysis files (e.g. `mkdir -p ~/server/analytics`)
+2. Change directory into your analysis folder (e.g. `cd ~/server/analytics`)
+3. Execute `userjoins.sh <log dir>` (e.g. `~/.bin/userjoins.sh ../logs/`)
+4. If you want to download all files, pack them: `tar -czf analysis.tar.gz *.csv`
+5. Execute `process-userjoins.r` (e.g. `~/.bin/process-userjoins.r`)
+6. The R script writes the output to `analysis.csv`
+
+#### Additional information
+- Note that consecutive executions of `process-userjoins.r` will fails, as the script can't differentiate between the old `analysis.csv` and the input data.
+- If you don't specify the log directory to `userjoins.sh` it will assume `../logs` by default.
+- You can adjust the logging level of `userjoins.sh` by setting the `LOG_LEVEL` environment variable:
+  ```shell script
+  LOG_LEVEL=2 userjoins.sh /path/to/logs
+  ```
+  Valid levels are:
+  - `0` for `DEBUG`
+  - `1` for `INFO`
+  - `2` for `WARNING`
+  - `3` for `SEVERE`
+- To set a custom time zone set the `TIMEZONE` environment variable: 
+  ```shell script
+  TIMEZONE='+05:30' userjoins.sh /path/to/logs
+  ```
+  The default is the system's time zone.
