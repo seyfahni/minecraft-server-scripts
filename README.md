@@ -4,9 +4,15 @@ Helper scripts to do various things.
 
 Disclaimer: You should **never** trust these scripts, as with all scripts on the Internet. Double-check them and use them on your own risk.
 
-## `minecraftctl` and `minecraft@.service`
+## Minecraft server as systemd service
 
 Run your Minecraft server as non-privileged user inside a screen managed by systemd, so it starts on server-startup and stopps on server shutdown. Allows as many servers as you like to run in parallel. `minecraftctl` offers starting and stopping servers, creating new instances and opening the terminal by multiple users in parallel.
+
+### Files
+
+Inside folder `minecraft-server-systemd`:
+- `minecraftctl`
+- `minecraft@.service`
 
 ### Installation
 
@@ -28,9 +34,14 @@ Run your Minecraft server as non-privileged user inside a screen managed by syst
 - `minecraftctl disable <server-id>`: disable the server with given id to be no longer started automatically on system boot
 - `minecraftctl create <server-id> <executable>`: create a new server instance with given id and executable
 
-## `paper-download`
+## Downloader
 
 Download the latest or any other paper executable.
+
+### Files
+
+Inside folder `downloader`:
+- `paper-download`
 
 ### Installation
 
@@ -42,9 +53,16 @@ Download the latest or any other paper executable.
 - `paper-download <minecraft-version>`: download latest paper build of the given minecraft version
 - `paper-download <minecraft-version> <build>`: download the given paper build of the given minecraft version
 
-## `minecraft-ramdisk-prepare.service`, `minecraft-ramdisk.timer` and `minecraft-ramdisk.service`
+## World in Ramdisk
 
 Put your worlds into a ramdisk for faster load and save times.
+
+### Files
+
+Inside folder `world-ramdisk`:
+- `minecraft-ramdisk-prepare.service`
+- `minecraft-ramdisk.timer`
+- `minecraft-ramdisk.service`
 
 ### Installation
 
