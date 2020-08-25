@@ -42,16 +42,20 @@ Download the latest or any other paper executable.
 
 Inside folder `downloader`:
 - `paper-download`
+- `tuinity-download`
 
 ### Installation
 
 - Put `paper-download` into `/usr/local/bin/` and ensure it is executable by everyone
+- Put `tuinity-download` into `/usr/local/bin/` and ensure it is executable by everyone
 
 ### Usage
 
 - `paper-download`: download latest paper build of the latest minecraft version available
 - `paper-download <minecraft-version>`: download latest paper build of the given minecraft version
 - `paper-download <minecraft-version> <build>`: download the given paper build of the given minecraft version
+- `tuinity-download`: download latest tuinity build available
+- `tuinity-download <build>`: download the given tuinity build
 
 ## World in Ramdisk
 

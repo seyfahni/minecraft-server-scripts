@@ -2,4 +2,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-wget https://ci.codemc.io/job/Spottedleaf/job/Tuinity/lastSuccessfulBuild/artifact/tuinity-paperclip.jar
+if [[ $# -gt 1 ]]; then
+	exit 1
+fi
+
+build="${1:-"$(wget -q -O - "https://ci.codemc.io/job/Spottedleaf/job/Tuinity/lastSuccessfulBuild/api/json" | jq -r '.id')"}"
+
+echo "downloading tuinity binary build $build"
+
+wget -q -O "tuinity-$build.jar" "https://ci.codemc.io/job/Spottedleaf/job/Tuinity/$build/artifact/tuinity-paperclip.jar"
