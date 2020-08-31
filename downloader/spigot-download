@@ -1,0 +1,53 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+# set and check constants
+JAVA_OPTS='-Xmx2G'
+export MAVEN_OPTS="$JAVA_OPTS"
+# Uncomment on Debian Stretch: https://www.spigotmc.org/wiki/buildtools/#troubleshooting-and-support
+#export _JAVA_OPTIONS="-Djavax.net.ssl.trustStorePassword=changeit"
+
+if [[ -z ${JAVA_OPTS+x} ]]; then
+	echo 'JAVA_HOME is not set!'
+	exit 1
+fi
+
+# parse command line arguments
+rev="${1:-latest}"
+if [[ $# -gt 1 ]]; then
+	echo 'Too many arguments!'
+	exit 1
+fi
+
+# download the BuildTools.jar
+if command -v jq >/dev/null; then
+	build_tools_build="$(curl -s 'https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/api/json' | jq -r '.id')"
+	build_tools_file="BuildTools-${build_tools_build}.jar"
+else
+	build_tools_file='BuildTools.jar'
+fi
+
+if [[ -e "$build_tools_file" ]]; then
+	curl_zflag=('-z' "$build_tools_file")
+else
+	curl_zflag=()
+fi
+curl -o "$build_tools_file" "${curl_zflag[@]}" 'https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar'
+
+# adjust the git environment
+set +e
+autocrlf="$(git config --global core.autocrlf)"
+autocrlf_set="$?"
+set -e
+if [[ $autocrlf_set -eq 0 ]]; then
+	git config --global --unset core.autocrlf
+fi
+
+# execute the BuildTools.jar
+"$JAVA_HOME"/bin/java "$JAVA_OPTS" -jar "$build_tools_file" --generate-docs --generate-source --compile craftbukkit --rev "$rev"
+
+# revert changes to the git environment
+if [[ $autocrlf_set -eq 0 ]]; then
+	git config --global core.autocrlf "$autocrlf"
+fi

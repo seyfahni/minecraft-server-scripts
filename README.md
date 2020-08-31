@@ -36,22 +36,26 @@ Inside folder `minecraft-server-systemd`:
 
 ## Downloader
 
-Download the latest or any other paper executable.
+Download or compile the latest or a specific build of spigot, paper or tuinity server.
 
 ### Files
 
 Inside folder `downloader`:
+- `spigot-download`
 - `paper-download`
 - `tuinity-download`
 
 ### Installation
 
+- Put `spigot-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Put `paper-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Put `tuinity-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Install `jq` on your system
 
 ### Usage
 
+- `spigot-download`: compile spigot for the latest minecraft version available
+- `spigot-download <minecraft-version>`: compile spigot for the given minecraft version
 - `paper-download`: download latest paper build of the latest minecraft version available
 - `paper-download <minecraft-version>`: download latest paper build of the given minecraft version
 - `paper-download <minecraft-version> <build>`: download the given paper build of the given minecraft version
