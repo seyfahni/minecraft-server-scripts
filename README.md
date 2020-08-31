@@ -2,7 +2,16 @@
 
 Helper scripts to do various things.
 
-Disclaimer: You should **never** trust these scripts, as with all scripts on the Internet. Double-check them and use them on your own risk.
+## Disclaimer
+
+> You should **never** trust these scripts, as with all scripts on the Internet. Double-check them and use them at your own risk.
+
+## Scripts
+
+- [Minecraft server as systemd service](#minecraft-server-as-systemd-service)
+- [Downloader](#downloader)
+- [World in Ramdisk](#world-in-ramdisk)
+- [Logfile analysis tools](#logfile-analysis-tools)
 
 ## Minecraft server as systemd service
 
