@@ -38,6 +38,10 @@ Inside folder `minecraft-server-systemd`:
 
 Download or compile the latest or a specific build of bukkit, spigot, paper or tuinity server.
 
+### Note
+
+`spigot-download` will create additional folders and files, you might want to execute it in its own folder.
+
 ### Files
 
 Inside folder `downloader`:
@@ -51,7 +55,8 @@ Inside folder `downloader`:
 - Put `paper-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Put `tuinity-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - You might want to create a symlink for `bukkit-download`: `ln -sf -T spigot-download bukkit-download`
-- Install `jq` on your system
+- Install `jq` on your system (for paper and tuinity, optional for bukkit and spigot)
+- Install `git` (for bukkit and spigot)
 
 ### Usage
 
