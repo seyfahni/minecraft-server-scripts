@@ -50,7 +50,7 @@ Inside folder `downloader`:
 - Put `spigot-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Put `paper-download` into `/usr/local/bin/` and ensure it is executable by everyone
 - Put `tuinity-download` into `/usr/local/bin/` and ensure it is executable by everyone
-- You might want to create a symlink for `bukkit-download`: `ln -sf -T /usr/local/bin/spigot-download /usr/local/bin/bukkit-download`
+- You might want to create a symlink for `bukkit-download`: `ln -sf -T spigot-download bukkit-download`
 - Install `jq` on your system
 
 ### Usage
