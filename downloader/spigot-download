@@ -45,7 +45,7 @@ if [[ $autocrlf_set -eq 0 ]]; then
 fi
 
 # execute the BuildTools.jar
-"$JAVA_HOME"/bin/java "$JAVA_OPTS" -jar "$build_tools_file" --generate-docs --generate-source --compile craftbukkit --rev "$rev"
+"$JAVA_HOME"/bin/java "$JAVA_OPTS" -jar "$build_tools_file" --generate-docs --generate-source --compile craftbukkit,spigot --rev "$rev"
 
 # revert changes to the git environment
 if [[ $autocrlf_set -eq 0 ]]; then
