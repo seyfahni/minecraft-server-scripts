@@ -1,0 +1,14 @@
+[Unit]
+Description=Create a local backup every hour
+
+[Service]
+Type=oneshot
+
+User=minecraft
+Group=minecraft
+
+EnvironmentFile=/opt/backup/config/minecraft/minecraft.env
+
+ExecStartPre=bash -c 'mysqldump --user=database_user --password="$MYSQL_PASSPHRASE" database > /opt/minecraft/mysql-dump.sql'
+ExecStart=borg create --info --compression zstd,22 --list --filter=AMEdbchsfx --stats /opt/backup/server::minecraft-{now:%%Y-%%m-%%d_%%H:00:00} /opt/minecraft --exclude-from "$BACKUP_EXCLUDE_FILE"
+ExecStartPost=borg prune --info --keep-hourly=48 --list --stats /opt/backup/minecraft

@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger hourly server backups.
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=multi-user.target
