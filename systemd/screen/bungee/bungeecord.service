@@ -1,0 +1,37 @@
+[Unit]
+Description=BungeeCord Minecraft Reverse Proxy
+Wants=network-online.target
+After=syslog.target network.target nss-lookup.target network-online.target
+
+[Service]
+Environment="JAVA_RUNTIME=/usr/bin/java"
+
+WorkingDirectory=/opt/minecraft
+
+User=minecraft
+Group=minecraft
+
+TimeoutStopSec=2m
+
+Restart=on-failure
+RestartSec=1m 30s
+
+Type=forking
+
+ExecStart=/usr/bin/screen -dmS bungeecord -- $JAVA_RUNTIME -server -Xms512M -Xmx512M -XX:+UseG1GC -XX:+CMSIncrementalPacing -XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 -jar BungeeCord.jar
+ExecStop=/usr/bin/screen -S bungeecord -p 0 -X eval 'stuff "end"\\015'
+ExecStop=/bin/bash -c 'while kill -0 $MAINPID >/dev/null 2>&1; do sleep 1; done'
+ExecReload=/usr/bin/screen -S bungeecord -p 0 -X eval 'stuff "greload"\\015'
+
+# It is recommended to turn this on for most services (except containerization).
+# Implies MountAPIVFS=yes
+ProtectControlGroups=yes
+
+# /home, /root and /run/user seem to be empty from within the unit. It is recommended to enable this setting for all long-running services (in particular network-facing ones).
+ProtectHome=yes
+
+# Read only mapping of /usr /boot /efi and /etc
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

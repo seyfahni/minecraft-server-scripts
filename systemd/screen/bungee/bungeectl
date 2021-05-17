@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+SAFE_SELF="/usr/local/bin/bungeectl"
+
+SCREEN_OWNER="minecraft"
+SCREEN_NAME="bungeecord"
+SYSTEMD_UNIT_NAME="bungeecord"
+
+if [ "$1" = "console" ]; then
+    if [ "$(id -un)" = $SCREEN_OWNER ]; then
+        script -c "screen -x $SCREEN_NAME" /dev/null
+    else
+        sudo -n -u $SCREEN_OWNER $SAFE_SELF console
+    fi
+elif [ "$1" = "start" ] || [ "$1" = "stop" ] || [ "$1" = "restart" ] || [ "$1" = "status" ]; then
+    if [ "$(id -u)" -eq 0 ]; then
+        systemctl "$1" $SYSTEMD_UNIT_NAME.service
+        code=$?
+        if [ "$1" != "status" ]; then
+            [ $code -eq 0 ] && echo "OK" || echo "ERROR"
+        fi
+    else
+        sudo -n $SAFE_SELF "$1"
+    fi
+else
+    echo "Usage: $(basename "$0") [start|stop|restart|status|console]" >&2
+fi
