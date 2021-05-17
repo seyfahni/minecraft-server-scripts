@@ -15,11 +15,13 @@ Helper scripts to do various things.
 
 ## Minecraft server as systemd service
 
-Run your Minecraft server as non-privileged user inside a screen managed by systemd, so it starts on server-startup and stopps on server shutdown. Allows as many servers as you like to run in parallel. `minecraftctl` offers starting and stopping servers, creating new instances and opening the terminal by multiple users in parallel.
+Run your Minecraft server as non-privileged user inside a screen managed by systemd, so it starts on server-startup and
+stops on server shutdown. Allows as many servers as you like to run in parallel. `minecraftctl` offers starting and
+stopping servers, creating new instances and opening the terminal by multiple users in parallel.
 
 ### Files
 
-Inside folder `minecraft-server-systemd`:
+Inside folder `minecraft-server-systemd/screen`:
 - `minecraftctl`
 - `minecraft@.service`
 
