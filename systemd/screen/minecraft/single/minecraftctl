@@ -1,0 +1,61 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+SAFE_SELF="/usr/local/bin/minecraftctl"
+
+MINECRAFT_USER="minecraft"
+SYSTEMD_UNIT_NAME="minecraft"
+SCREEN_NAME="minecraft"
+
+print_help() {
+  echo "Usage: $(basename "$0") [console|run|status|start|stop|restart|enable|disable]" >&2
+  echo "    OR $(basename "$0") run COMMAND" >&2
+}
+
+require_no_arguments() {
+  if [[ $# -ne 0 ]]; then
+    print_help
+  fi
+}
+
+if [[ $# -eq 0 ]]; then
+  print_help
+  exit
+fi
+
+if [[ "$(id -un)" != "$MINECRAFT_USER" ]]; then
+  sudo -n -u "$MINECRAFT_USER" "$SAFE_SELF" "$@"
+  exit
+fi
+
+command=$1
+shift
+
+case "$command" in
+run)
+  if [[ $# -eq 0 ]]; then
+    echo -n "Command: "
+    IFS= read -er mc_command
+  else
+    OLD_IFS="$IFS"
+    IFS=' '
+    mc_command="$*"
+    IFS="$OLD_IFS"
+  fi
+  script -qc "screen -S '$SCREEN_NAME' -p 0 -X stuff $(printf '%q' "$mc_command")\015" /dev/null
+  ;;
+console)
+  require_no_arguments "$@"
+  script -qc "screen -x '$SCREEN_NAME'" /dev/null
+  ;;
+start | stop | restart | status | enable | disable)
+  require_no_arguments "$@"
+  systemctl "$command" "$SYSTEMD_UNIT_NAME.service"
+  ;;
+*)
+  print_help
+  exit 1
+  ;;
+esac

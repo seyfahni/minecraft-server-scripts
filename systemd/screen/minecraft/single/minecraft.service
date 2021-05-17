@@ -1,0 +1,37 @@
+[Unit]
+Description=Minecraft Dedicated Server
+Wants=network-online.target
+After=syslog.target network.target nss-lookup.target network-online.target
+
+[Service]
+Environment="JAVA_RUNTIME=/usr/bin/java"
+
+WorkingDirectory=/opt/minecraft
+
+User=minecraft
+Group=minecraft
+
+TimeoutStopSec=2m
+
+Restart=on-failure
+RestartSec=1m 30s
+
+Type=forking
+
+# Use optimized java GC flags https://mcflags.emc.gs/ although they are meant for Paper they will do fine with other java server implementations as well
+ExecStart=/usr/bin/screen -dmS minecraft -- $JAVA_RUNTIME -server -Xms2G -Xmx2G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar minecraft_server.jar
+ExecStop=/usr/bin/screen -S minecraft -p 0 -X stuff stop\015
+ExecStop=/bin/bash -c 'while kill -0 $MAINPID >/dev/null 2>&1; do sleep 1; done'
+
+# It is recommended to turn this on for most services (except containerization).
+# Implies MountAPIVFS=yes
+ProtectControlGroups=yes
+
+# /home, /root and /run/user seem to be empty from within the unit. It is recommended to enable this setting for all long-running services (in particular network-facing ones).
+ProtectHome=yes
+
+# Read only mapping of /usr /boot /efi and /etc
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
