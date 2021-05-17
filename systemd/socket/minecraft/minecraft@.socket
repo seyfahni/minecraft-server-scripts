@@ -1,0 +1,13 @@
+[Unit]
+PartOf=minecraft@.service
+
+[Socket]
+SocketUser=game
+SocketGroup=game
+SocketMode=0660
+
+ListenFIFO=%t/minecraft/%i.sock
+RemoveOnStop=yes
+
+[Install]
+WantedBy=sockets.target

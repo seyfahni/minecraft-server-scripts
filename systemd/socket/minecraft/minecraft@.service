@@ -1,0 +1,62 @@
+[Unit]
+Description=Minecraft Dedicated Server %i
+Wants=network-online.target
+After=minecraft@%i.socket syslog.target network.target nss-lookup.target network-online.target
+Requires=minecraft@%i.socket
+
+[Service]
+Environment="WORKING_DIRECTORY=/opt/minecraft"
+Environment="MINECRAFT_USER=minecraft"
+Environment="MINECRAFT_GROUP=minecraft"
+
+WorkingDirectory=$WORKING_DIRECTORY/%i
+User=$MINECRAFT_USER
+Group=$MINECRAFT_GROUP
+
+TimeoutStopSec=2m
+
+Restart=on-failure
+RestartSec=1m 30s
+
+ExecStart=/server/game/minecraft/%i/start.sh
+ExecStop=/bin/sh -c 'echo "stop" > /run/minecraft/%i.sock'
+ExecStop=/bin/sh -c 'while kill -0 $MAINPID >/dev/null 2>&1; do sleep 1; done'
+
+Sockets=minecraft@%i.socket
+StandardInput=socket
+StandardOutput=journal
+StandardError=journal
+
+# Implies NoNewPrivileges=yes (while running in user mode)
+PrivateDevices=yes
+
+PrivateMounts=yes
+
+PrivateTmp=yes
+
+# Users Database is not available for within the unit, only root and the units user is available, everybody else is nobody
+PrivateUsers=yes
+
+# It is hence recommended to turn this on for most services.
+# Implies MountAPIVFS=yes
+ProtectControlGroups=yes
+
+# /home, /root and /run/user seem to be empty from within the unit. It is recommended to enable this setting for all long-running services (in particular network-facing ones).
+ProtectHome=yes
+
+# Block module system calls, also /usr/lib/modules. It is recommended to turn this on for most services that do not need special file systems or extra kernel modules to work
+# Implies NoNewPrivileges=yes (while running in user mode)
+ProtectKernelModules=yes
+
+# /proc/sys, /sys, /proc/sysrq-trigger, /proc/latency_stats, /proc/acpi, /proc/timer_stats, /proc/fs and /proc/irq will be read-only within the unit. It is recommended to turn this on for most services.
+# Implies MountAPIVFS=yes
+# Implies NoNewPrivileges=yes (while running in user mode)
+ProtectKernelTunables=yes
+
+# Read only mapping of entire system
+ProtectSystem=strict
+
+ReadWritePaths=$WORKING_DIRECTORY/%i
+
+[Install]
+WantedBy=multi-user.target
