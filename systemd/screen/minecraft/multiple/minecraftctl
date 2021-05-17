@@ -8,7 +8,7 @@ SAFE_SELF="/usr/local/bin/minecraftctl"
 WORKING_DIRECTORY="/opt/minecraft"
 MINECRAFT_USER="minecraft"
 SYSTEMD_UNIT_NAME="minecraft"
-SCREEN_NAME="test"
+SCREEN_NAME="minecraft"
 
 print_help() {
   echo "Usage: $(basename "$0") [console|run|status|start|stop|restart|enable|disable] INSTANCE" >&2
@@ -80,4 +80,5 @@ create)
 *)
   print_help
   exit 1
+  ;;
 esac

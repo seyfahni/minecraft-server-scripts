@@ -21,17 +21,18 @@ stopping servers, creating new instances and opening the terminal by multiple us
 
 ### Files
 
-Inside folder `minecraft-server-systemd/screen`:
+Inside folder `systemd/screen/minecraft/multiple`:
 - `minecraftctl`
 - `minecraft@.service`
 
 ### Installation
 
 - Create a unix user and group `minecraft`
-  - You can use other user and group names, adjust `minecraft@.service`'s `User=` and `Group=` settings and `minecraftctl`'s `SCREEN_OWNER` constant accordingly
+  - You can use different a java version, working directory, user and group names; adjust `minecraft@.service`'s `Environment="JAVA_RUNTIME="`, `WorkingDirectory=`, `User=` and `Group=` settings
 - Put `minecraft@.service` into `/etc/systemd/system/`
 - Put `minecraftctl` into `/usr/local/bin/` and ensure it is executable by everyone and owned by root
   - You can put `minecraftctl` somewhere else, but you then need to adjust the `SAFE_SELF` constant inside the script
+  - You need to set the same environment as defined in your service file; adjust `minecraftctl`'s `WORKING_DIRECTORY=`, `MINECRAFT_USER=` and `SYSTEMD_UNIT_NAME=`  and `SCREEN_NAME` constants accordingly
 - Create a sudoers entry to allow users or a group of your choice to execute `minecraftctl` with elevated permissions
 
 ### Usage
