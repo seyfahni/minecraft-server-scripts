@@ -1,5 +1,6 @@
 [Unit]
 PartOf=minecraft@.service
+RefuseManualStop=true
 
 [Socket]
 SocketUser=game
