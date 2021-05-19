@@ -1,0 +1,11 @@
+[Unit]
+Description=Restart Minecraft server %i daily on 5:30
+Requisite=minecraft@%i.service
+After=valheim@%i.service
+
+[Timer]
+OnCalendar=*-*-* 5:30:00
+RandomizedDelaySec=1m
+
+[Install]
+WantedBy=timers.target

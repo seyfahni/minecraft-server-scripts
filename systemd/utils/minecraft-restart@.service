@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart Minecraft server %i
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl try-restart minecraft@%i.service
