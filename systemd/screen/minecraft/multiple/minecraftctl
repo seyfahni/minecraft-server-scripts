@@ -36,7 +36,7 @@ command=$1
 instance=$2
 shift 2
 
-if [[ ! -d "$WORKING_DIRECTORY/$2" && "$command" != create ]]; then
+if [[ ! -d "$WORKING_DIRECTORY/$instance" && "$command" != create ]]; then
   echo "Unknown instance: $instance" >&2
   exit 2
 fi
