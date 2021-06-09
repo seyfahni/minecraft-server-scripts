@@ -38,6 +38,7 @@ Inside folder `systemd/screen/minecraft/multiple`:
 ### Usage
 
 - `minecraftctl`: show help
+- `minecraftctl console <server-id>`: open the console of the server with given id, Use `Ctrl` + `a` followed by `d` to close
 - `minecraftctl start <server-id>`: start the server with given id
 - `minecraftctl stop <server-id>`: stop the server with given id
 - `minecraftctl restart <server-id>`: restart the server with given id
